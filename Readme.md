@@ -1,175 +1,364 @@
-# Form-Data [![Build Status](https://travis-ci.org/felixge/node-form-data.png?branch=master)](https://travis-ci.org/felixge/node-form-data) [![Dependency Status](https://gemnasium.com/felixge/node-form-data.png)](https://gemnasium.com/felixge/node-form-data)
+# Socket.IO
 
-A module to create readable ```"multipart/form-data"``` streams. Can be used to submit forms and file uploads to other web applications.
+Socket.IO is a Node.JS project that makes WebSockets and realtime possible in
+all browsers. It also enhances WebSockets by providing built-in multiplexing,
+horizontal scalability, automatic JSON encoding/decoding, and more.
 
-The API of this module is inspired by the [XMLHttpRequest-2 FormData Interface][xhr2-fd].
+## How to Install
 
-[xhr2-fd]: http://dev.w3.org/2006/webapi/XMLHttpRequest-2/Overview.html#the-formdata-interface
-[streams2-thing]: http://nodejs.org/api/stream.html#stream_compatibility_with_older_node_versions
-
-## Install
-
-```
-npm install form-data
+```bash
+npm install socket.io
 ```
 
-## Usage
+## How to use
 
-In this example we are constructing a form with 3 fields that contain a string,
-a buffer and a file stream.
+First, require `socket.io`:
 
-``` javascript
-var FormData = require('form-data');
-var fs = require('fs');
-
-var form = new FormData();
-form.append('my_field', 'my value');
-form.append('my_buffer', new Buffer(10));
-form.append('my_file', fs.createReadStream('/foo/bar.jpg'));
+```js
+var io = require('socket.io');
 ```
 
-Also you can use http-response stream:
+Next, attach it to a HTTP/HTTPS server. If you're using the fantastic `express`
+web framework:
 
-``` javascript
-var FormData = require('form-data');
-var http = require('http');
+#### Express 3.x
 
-var form = new FormData();
+```js
+var app = express()
+  , server = require('http').createServer(app)
+  , io = io.listen(server);
 
-http.request('http://nodejs.org/images/logo.png', function(response) {
-  form.append('my_field', 'my value');
-  form.append('my_buffer', new Buffer(10));
-  form.append('my_logo', response);
-});
-```
+server.listen(80);
 
-Or @mikeal's request stream:
-
-``` javascript
-var FormData = require('form-data');
-var request = require('request');
-
-var form = new FormData();
-
-form.append('my_field', 'my value');
-form.append('my_buffer', new Buffer(10));
-form.append('my_logo', request('http://nodejs.org/images/logo.png'));
-```
-
-In order to submit this form to a web application, call ```submit(url, [callback])``` method:
-
-``` javascript
-form.submit('http://example.org/', function(err, res) {
-  // res – response object (http.IncomingMessage)  //
-  res.resume(); // for node-0.10.x
-});
-
-```
-
-For more advanced request manipulations ```submit()``` method returns ```http.ClientRequest``` object, or you can choose from one of the alternative submission methods.
-
-### Alternative submission methods
-
-You can use node's http client interface:
-
-``` javascript
-var http = require('http');
-
-var request = http.request({
-  method: 'post',
-  host: 'example.org',
-  path: '/upload',
-  headers: form.getHeaders()
-});
-
-form.pipe(request);
-
-request.on('response', function(res) {
-  console.log(res.statusCode);
-});
-```
-
-Or if you would prefer the `'Content-Length'` header to be set for you:
-
-``` javascript
-form.submit('example.org/upload', function(err, res) {
-  console.log(res.statusCode);
-});
-```
-
-To use custom headers and pre-known length in parts:
-
-``` javascript
-var CRLF = '\r\n';
-var form = new FormData();
-
-var options = {
-  header: CRLF + '--' + form.getBoundary() + CRLF + 'X-Custom-Header: 123' + CRLF + CRLF,
-  knownLength: 1
-};
-
-form.append('my_buffer', buffer, options);
-
-form.submit('http://example.com/', function(err, res) {
-  if (err) throw err;
-  console.log('Done');
-});
-```
-
-Form-Data can recognize and fetch all the required information from common types of streams (```fs.readStream```, ```http.response``` and ```mikeal's request```), for some other types of streams you'd need to provide "file"-related information manually:
-
-``` javascript
-someModule.stream(function(err, stdout, stderr) {
-  if (err) throw err;
-
-  var form = new FormData();
-
-  form.append('file', stdout, {
-    filename: 'unicycle.jpg',
-    contentType: 'image/jpg',
-    knownLength: 19806
-  });
-
-  form.submit('http://example.com/', function(err, res) {
-    if (err) throw err;
-    console.log('Done');
+io.sockets.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
   });
 });
 ```
 
-For edge cases, like POST request to URL with query string or to pass HTTP auth credentials, object can be passed to `form.submit()` as first parameter:
+#### Express 2.x
 
-``` javascript
-form.submit({
-  host: 'example.com',
-  path: '/probably.php?extra=params',
-  auth: 'username:password'
-}, function(err, res) {
-  console.log(res.statusCode);
+```js
+var app = express.createServer()
+  , io = io.listen(app);
+
+app.listen(80);
+
+io.sockets.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
 });
 ```
 
-In case you need to also send custom HTTP headers with the POST request, you can use the `headers` key in first parameter of `form.submit()`:
+Finally, load it from the client side code:
 
-``` javascript
-form.submit({
-  host: 'example.com',
-  path: '/surelynot.php',
-  headers: {'x-test-header': 'test-header-value'}
-}, function(err, res) {
-  console.log(res.statusCode);
+```html
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost');
+  socket.on('news', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+</script>
+```
+
+For more thorough examples, look at the `examples/` directory.
+
+## Short recipes
+
+### Sending and receiving events.
+
+Socket.IO allows you to emit and receive custom events.
+Besides `connect`, `message` and `disconnect`, you can emit custom events:
+
+```js
+// note, io.listen(<port>) will create a http server for you
+var io = require('socket.io').listen(80);
+
+io.sockets.on('connection', function (socket) {
+  io.sockets.emit('this', { will: 'be received by everyone' });
+
+  socket.on('private message', function (from, msg) {
+    console.log('I received a private message by ', from, ' saying ', msg);
+  });
+
+  socket.on('disconnect', function () {
+    io.sockets.emit('user disconnected');
+  });
 });
 ```
 
-## Notes
+### Storing data associated to a client
 
-- ```getLengthSync()``` method DOESN'T calculate length for streams, use ```knownLength``` options as workaround.
-- If it feels like FormData hangs after submit and you're on ```node-0.10```, please check [Compatibility with Older Node Versions][streams2-thing]
+Sometimes it's necessary to store data associated with a client that's
+necessary for the duration of the session.
 
-## TODO
+#### Server side
 
-- Add new streams (0.10) support and try really hard not to break it for 0.8.x.
+```js
+var io = require('socket.io').listen(80);
 
-## License
+io.sockets.on('connection', function (socket) {
+  socket.on('set nickname', function (name) {
+    socket.set('nickname', name, function () { socket.emit('ready'); });
+  });
 
-Form-Data is licensed under the MIT license.
+  socket.on('msg', function () {
+    socket.get('nickname', function (err, name) {
+      console.log('Chat message by ', name);
+    });
+  });
+});
+```
+
+#### Client side
+
+```html
+<script>
+  var socket = io.connect('http://localhost');
+
+  socket.on('connect', function () {
+    socket.emit('set nickname', prompt('What is your nickname?'));
+    socket.on('ready', function () {
+      console.log('Connected !');
+      socket.emit('msg', prompt('What is your message?'));
+    });
+  });
+</script>
+```
+
+### Restricting yourself to a namespace
+
+If you have control over all the messages and events emitted for a particular
+application, using the default `/` namespace works.
+
+If you want to leverage 3rd-party code, or produce code to share with others,
+socket.io provides a way of namespacing a `socket`.
+
+This has the benefit of `multiplexing` a single connection. Instead of
+socket.io using two `WebSocket` connections, it'll use one.
+
+The following example defines a socket that listens on '/chat' and one for
+'/news':
+
+#### Server side
+
+```js
+var io = require('socket.io').listen(80);
+
+var chat = io
+  .of('/chat')
+  .on('connection', function (socket) {
+    socket.emit('a message', { that: 'only', '/chat': 'will get' });
+    chat.emit('a message', { everyone: 'in', '/chat': 'will get' });
+  });
+
+var news = io
+  .of('/news');
+  .on('connection', function (socket) {
+    socket.emit('item', { news: 'item' });
+  });
+```
+
+#### Client side:
+
+```html
+<script>
+  var chat = io.connect('http://localhost/chat')
+    , news = io.connect('http://localhost/news');
+
+  chat.on('connect', function () {
+    chat.emit('hi!');
+  });
+
+  news.on('news', function () {
+    news.emit('woot');
+  });
+</script>
+```
+
+### Sending volatile messages.
+
+Sometimes certain messages can be dropped. Let's say you have an app that
+shows realtime tweets for the keyword `bieber`. 
+
+If a certain client is not ready to receive messages (because of network slowness
+or other issues, or because he's connected through long polling and is in the
+middle of a request-response cycle), if he doesn't receive ALL the tweets related
+to bieber your application won't suffer.
+
+In that case, you might want to send those messages as volatile messages.
+
+#### Server side
+
+```js
+var io = require('socket.io').listen(80);
+
+io.sockets.on('connection', function (socket) {
+  var tweets = setInterval(function () {
+    getBieberTweet(function (tweet) {
+      socket.volatile.emit('bieber tweet', tweet);
+    });
+  }, 100);
+
+  socket.on('disconnect', function () {
+    clearInterval(tweets);
+  });
+});
+```
+
+#### Client side
+
+In the client side, messages are received the same way whether they're volatile
+or not.
+
+### Getting acknowledgements
+
+Sometimes, you might want to get a callback when the client confirmed the message
+reception.
+
+To do this, simply pass a function as the last parameter of `.send` or `.emit`.
+What's more, when you use `.emit`, the acknowledgement is done by you, which
+means you can also pass data along:
+
+#### Server side
+
+```js
+var io = require('socket.io').listen(80);
+
+io.sockets.on('connection', function (socket) {
+  socket.on('ferret', function (name, fn) {
+    fn('woot');
+  });
+});
+```
+
+#### Client side
+
+```html
+<script>
+  var socket = io.connect(); // TIP: .connect with no args does auto-discovery
+  socket.on('connect', function () { // TIP: you can avoid listening on `connect` and listen on events directly too!
+    socket.emit('ferret', 'tobi', function (data) {
+      console.log(data); // data will be 'woot'
+    });
+  });
+</script>
+```
+
+### Broadcasting messages
+
+To broadcast, simply add a `broadcast` flag to `emit` and `send` method calls.
+Broadcasting means sending a message to everyone else except for the socket
+that starts it.
+
+#### Server side
+
+```js
+var io = require('socket.io').listen(80);
+
+io.sockets.on('connection', function (socket) {
+  socket.broadcast.emit('user connected');
+  socket.broadcast.json.send({ a: 'message' });
+});
+```
+
+### Rooms
+
+Sometimes you want to put certain sockets in the same room, so that it's easy
+to broadcast to all of them together.
+
+Think of this as built-in channels for sockets. Sockets `join` and `leave`
+rooms in each socket.
+
+#### Server side
+
+```js
+var io = require('socket.io').listen(80);
+
+io.sockets.on('connection', function (socket) {
+  socket.join('justin bieber fans');
+  socket.broadcast.to('justin bieber fans').emit('new fan');
+  io.sockets.in('rammstein fans').emit('new non-fan');
+});
+```
+
+### Using it just as a cross-browser WebSocket
+
+If you just want the WebSocket semantics, you can do that too.
+Simply leverage `send` and listen on the `message` event:
+
+#### Server side
+
+```js
+var io = require('socket.io').listen(80);
+
+io.sockets.on('connection', function (socket) {
+  socket.on('message', function () { });
+  socket.on('disconnect', function () { });
+});
+```
+
+#### Client side
+
+```html
+<script>
+  var socket = io.connect('http://localhost/');
+  socket.on('connect', function () {
+    socket.send('hi');
+
+    socket.on('message', function (msg) {
+      // my msg
+    });
+  });
+</script>
+```
+
+### Changing configuration
+
+Configuration in socket.io is TJ-style:
+
+#### Server side
+
+```js
+var io = require('socket.io').listen(80);
+
+io.configure(function () {
+  io.set('transports', ['websocket', 'flashsocket', 'xhr-polling']);
+});
+
+io.configure('development', function () {
+  io.set('transports', ['websocket', 'xhr-polling']);
+  io.enable('log');
+});
+```
+
+## License 
+
+(The MIT License)
+
+Copyright (c) 2011 Guillermo Rauch &lt;guillermo@learnboost.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
