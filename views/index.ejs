@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<html>
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <title>LUMA</title>
+    <link rel="apple-touch-icon" href="http://i.imgur.com/uK2wJYa.png"/>
+    <meta name="apple-mobile-web-app-capable" content="yes" /> 
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400' rel='stylesheet' type='text/css'>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"> <!-- bootstrap css -->
+    <link href="/stylesheets/style.css" rel="stylesheet"> <!-- Our CSS -->
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> <!-- jQuery -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script> <!-- jQueryUI -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> <!-- bootstrap js -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular.min.js"></script> <!-- bootstrap angular js -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular-animate.js"></script> <!-- bootstrap angular animate js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script> <!-- bootstrap angular ui router js -->
+    <script src="/javascripts/angularApp.js"></script> <!-- Our app -->
+
+  </head>
+
+  <!-- <body ng-app="labz" ng-controller='MainCtrl'> -->
+  <body ng-app="luma">
+    <div ng-controller="ParentCtrl">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" ng-click="isCollapsed = !isCollapsed">
+                    <span class="sr-only">Toggle navigation</span>
+                    <!-- why do we have three of these -->
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/#/home" ng-click="isCollapsed = 1">L U M A</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div ng-class="{'collapse':isCollapsed, 'navbar-collapse':isCollapsed, 'navbar-app-collapse': isCollapsed}" ng-click="isCollapsed = !isCollapsed">
+                <ul class="nav navbar-nav" nav-collapse>
+                  <li ng-class="{ active: isActive(val)}" ng-repeat="(key, val) in links"><a href="{{val}}">{{key}}</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </div>
+  <div class = 'container'>
+
+    <div class="row">
+
+        <!-- SubHeader -->
+        <ui-view></ui-view>
+        <script type="text/ng-template" id="/home.html">
+        <div class="col-lg-12">
+            <h2 id="bubble-header"> Computer Availability 
+              <button ng-show="testing" ng-click="reset('empty')"> Empty </button> 
+              <button ng-show="testing" ng-click="reset('half')"> Half </button>
+              <button ng-show="testing" ng-click="reset('full')"> Full </button>
+            </h2>
+            <h4 id="chooseroom"> Choose a Lab Room.</h4>
+        </div>
+
+        <div ng-repeat="(labName,bubble) in bubbles" class="col-lg-4 col-sm-6">
+            <!-- bubble -->
+            <div ng-class="{'bubble':1,
+              'reserved': reservations[labName] }"
+                labname="{{labName}}">
+            <!-- link -->
+            <a href="{{makeurl(labName)}}">
+                    <!-- bar -->
+                   <div ng-view 
+                    freespace = "{{bubble.freeSpace}}"
+                    totalspace = "{{bubble.totalSpace}}"
+                    class="bar"
+                    move-bar></div>
+                    <!-- /.bar -->
+                    <h1 style="font-size:150px"><center>
+                    <div class="num" ng-hide="reservations[labName]">{{bubble.freeSpace}}</div>
+                    <div class="reserve-text" ng-show="reservations[labName]">RESERVED<br>{{reservations[labName].title}}</div>
+                    </center></h1>
+            </a>
+            <!-- /.link -->
+            </div>
+            <!-- /.bubble -->
+            <h3 class="bubble-labname">{{bubble.commonLabName}}</h3> <!-- title -->
+        </div>
+        </script>
+        <script type="text/ng-template" id="/map.html">
+        <div class="col-lg-12">
+            <h2 class="page-header">{{layout.commonLabName}}
+              <button ng-show="testing" ng-click="taken='true';reset(layout.lName)"> Sit at 12 </button> 
+              <button ng-show="testing" ng-click="taken='false';reset(layout.lName)"> Stand Up </button>
+              <button ng-show="testing" ng-click="broken='true';reset(layout.lName)"> Break 14 </button> 
+              <button ng-show="testing" ng-click="broken='false';reset(layout.lName)"> Fix 14 </button>
+            <h2>
+        </div>
+
+        <div class="row" ng-repeat="row in layout.table">
+            <div ng-repeat="(index,col) in row"
+              ng-class="{'col-xs-1': 1, 
+                  '{{layout.offset}}': index == '0', 
+                  'available': computers[col].state == 'OPEN',
+                  'broken': computers[col].state == 'IN REPAIR' || computers[col].state == 'OFF_LINE',
+                  'unavailable': computers[col].state == 'IN USE',
+                  'computer':col != '',
+                  'empty':col ==''}">
+              <span ng-show="col==''">
+                &nbsp;
+              </span>
+              <span ng-hide="col==''">
+              {{col}}
+              </span>
+            </div>
+        </div>
+        <div class="row"> 
+          <div class="col-xs-1 {{layout.offset}} ">Key:</div>
+        </div>
+        <div class="row"> 
+          <div class="col-xs-1 {{layout.offset}} available">&nbsp;</div> Open
+        </div>
+        <div class="row"> 
+          <div class="col-xs-1 {{layout.offset}} unavailable">&nbsp;</div> Taken
+        </div>
+        <div class="row"> 
+          <div class="col-xs-1 {{layout.offset}} broken">&nbsp;</div> Broken
+        </div>
+        </script>
+        <script type="text/ng-template" id="/aboutus.html">
+        <div class="col-lg-12">
+            <h2 class="page-header">Mission</h2>
+            <h3 id="mission"> At LUMA, we strive to provide UCSD students with a quick and easy way to find seats in the CSE Basement. With help from ACMS, we were able to turn our vision into a reality.
+<h3>
+            <h2 class="page-header">Meet The Team</h2>
+        </div>
+          <div ng-repeat="(name,info) in people">
+            <div class="col-lg-4 col-sm-6">
+                <!-- Picture -->
+                <div class="image">
+                    <img ng-src="{{info.Picture}}"></img>
+                </div>
+                <!-- \.Picture -->
+                <!-- Name -->
+                <h3 class="image-name">{{name}}</h3>
+                <!-- \.Name -->
+                <!-- Title -->
+                <h4 class="image-title">{{info.Title}}</h3>
+                <!-- \.Title -->
+                <!-- Description -->
+                <div class="description">{{info.Description}}</div>
+                <!-- \.Description -->
+            </div>
+          </div>
+        </script>
+      </div>
+    </div>
+        <!-- Footer -->
+        <div class="footer">
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>&copy; Luma, Inc. 2015</p>
+		    <p>Please contact us at group12cs110@gmail.com if you have any questions or concerns. </p>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </div>
+  </div>
+  </div>
+  </body>
+</html>

@@ -1,0 +1,51 @@
+      <script type="text/ng-template" id="/tutorial.html">
+      <div class="col-lg-12">
+          <h2 class="page-header">Welcome to LUMA!<h2>
+          <a href="/#/home" class="continuebtn">Continue to Main Site >> </a>
+      </div>
+      <div>
+      <div class="col-lg-4 col-sm-6">
+          <!-- bubble -->
+          <div class='bubble'
+              data-toggle="tooltip" data-placement="left" title="Open" tooltip>
+          <!-- link -->
+          <a href="/#/map/B220">
+                  <!-- bar -->
+                 <div ng-view 
+                  freespace = "20"
+                  totalspace = "30"
+                  class="bar"
+                  move-bar></div>
+                  <!-- /.bar -->
+                  <h1 style="font-size:150px"><center>
+                  <div class="num"
+              data-toggle="tooltip" data-placement="top" title="The number of free seats" tooltip>20</div></center></h1>
+          </a>
+          <!-- /.link -->
+          </div>
+          <!-- /.bubble -->
+          <h3 data-toggle="tooltip" data-placement="left" title="Name of the lab in EBU3B" tooltip>B220</h3> <!-- title -->
+      </div>
+      <div class="col-lg-4 col-sm-6">
+          <!-- bubble -->
+          <div class='bubble reserved'
+              data-toggle="tooltip" data-placement="left" title="Reserved" tooltip>
+          <!-- link -->
+          <a href="/#/map/B230">
+                  <!-- bar -->
+                 <div ng-view 
+                  freespace = "13"
+                  totalspace = "42"
+                  class="bar"
+                  move-bar
+                  data-toggle="tooltip" data-placement="top" title="Bar moves up as the room gets fuller" tooltip></div>
+                  <!-- /.bar -->
+                  <h1 style="font-size:150px"><center>
+                  <div class="num">13</div></center></h1>
+          </a>
+          <!-- /.link -->
+          </div>
+          <!-- /.bubble -->
+          <h3>B230</h3> <!-- title -->
+      </div>
+      </script>

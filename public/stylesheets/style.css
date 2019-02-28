@@ -1,0 +1,297 @@
+/********** Bootstrap Navbar **********/
+body {
+    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+}
+
+.img-center {
+	margin: 60 auto;
+}
+
+footer {
+  width: 100%;
+}
+/********** Bootstrap Navbar **********/
+.bubble {
+    height: 200px;
+    width: 200px;
+    border-radius: 100px 100px;
+    background: #54c0d6;
+    overflow: hidden; /* makes sure you can't see the rest of the bar */
+    position: relative;
+    margin-left:calc(50% - 100px);
+}
+.bubble:hover {
+  opacity: .7;
+}
+.bubble a:hover {
+  color:white;
+}
+
+.bar{
+    position: relative;
+    top: 200px;
+    height: 200px;
+    width: 200px;
+    background: black;
+}
+
+.image{
+    height: 300px;
+    width: 300px;
+    border-radius: 200px 200px;
+    background-color:black;
+    overflow: hidden;
+    margin-left:calc(50% - 150px)
+}
+img{
+    position: relative;
+    max-width:320px;
+    max-height:320px;
+    width: auto;
+    height: auto;
+    height: auto;
+}
+
+.image-name {
+  margin-top: 15px;
+  margin-bottom: 30px;
+  text-align:center;
+}
+.image-title {
+  text-align:center;
+}
+
+.reserve-text {
+    position: absolute;
+    top: 80px;
+    opacity: .7;
+    height: 25px;
+    width: 200px;
+font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+    font-size: 25px;
+    text-align:center;
+}
+.reserve-text:hover {
+  color:white;
+}
+.num {
+    position: absolute;
+    top: 18px;
+    text-align: center;
+    opacity: .7;
+    height: 25px;
+    width: 200px;
+font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+    font-size: 140px;
+}
+
+.num:hover {
+  color:white;
+}
+
+.computer {
+    text-align: center;
+    font-weight: 600;
+font-family: 'Source Sans Pro', sans-serif;
+}
+
+.header {
+  font-family: 'Source Sans Pro', sans-serif;  
+font-weight: 300;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+/* NEW STUFF */
+.available {
+  background: lightgreen;
+}
+
+.unavailable {
+  background: #AAAAAA;
+}
+
+.broken {
+  background: #FF7070;
+}
+
+.highlight {
+  background: #F3F781;
+}
+
+.empty {
+  background: lightblue;
+}
+.reserved {
+  background: #b0b0b0;
+}
+.description{
+  height: 200px;
+  width: 94%;
+  padding-left: 30px;
+  font-weight: 300;
+}
+
+/********** CUSTOM BOOTSTRAP **********/
+.header {
+  font-weight: 100;
+  padding-bottom: 50px;
+  padding-top: 80px;
+}
+
+.footer {
+font-family: 'Source Sans Pro', sans-serif;
+float:left;
+    padding:15px 0;
+    min-width:100%;
+background-color: #fafafa;
+position: relative;
+padding-top: 80px;
+margin-top: 60px;
+}
+
+.navbar-brand {
+font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 600;
+  line-height: 42px;
+  font-size: 40px;
+}
+.navbar-header > .navbar-brand:active {
+    color: black;
+}
+.navbar-header > .navbar-brand:visited {
+    color: black;
+}
+.navbar-header > .navbar-brand:link {
+    color: black;
+}
+.navbar-header > .navbar-brand:hover {
+    color: white;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    background-color: #FFFF00;
+    color: #FFC0CB;
+}
+
+.navbar-inverse {
+  background-color: #f0f2f1;
+}
+
+.navbar-fixed-top {
+  top: 0;
+  border-width: 0px 0 0px;
+}
+
+.navbar {
+  min-height: 80px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+}
+
+body {
+font-family: 'Source Sans Pro', sans-serif;
+  font-size: 15px;
+  line-height: 1.42857143;
+  color: #333;
+  background-color: #fff;
+
+}
+
+.navbar-nav>li>a {
+  padding-top: 27px;
+  padding-bottom: 15px;
+}
+
+.navbar-inverse{
+  color: #000000;
+}
+
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+h2, .h2 {
+  font-size: 26px;
+}
+
+.page-header {
+  padding-bottom: 52px;
+  margin: 40px 0 20px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin: 40px 0 20px;
+  border-bottom: 0px solid #eee;
+  font-size: 35px;
+  font-weight: 300;
+}
+
+#bubble-header {
+  padding-bottom: 52px;
+  margin: 40px 0 20px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+  padding-top: 40px;
+  padding-bottom: 20px;
+  margin: 40px 0 20px;
+  border-bottom: 0px solid #eee;
+  font-size: 35px;
+  font-weight: 300;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+  color: black;
+}
+
+.bubble-labname {
+  margin-top: 15px;
+  margin-bottom: 30px;
+  margin-left:calc(50% - 100px);
+  width: 200px;
+  text-align:center;
+}
+
+#mission {
+  text-align: center;
+  font-size: 20px;
+  margin-left: 5%;
+/*  margin-left: 150px;
+  margin-right: 150px;*/
+  color: #525252;
+  line-height: 1.5em;
+  width: 90%;
+  text-align: center;
+  font-weight: 300;
+  background-color: #fafafa;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+#chooseroom {
+  font-size: 16px;
+  text-align: center;
+  padding-bottom: 50px;
+  color: #aeaeae;
+}
+
+h4 {
+  margin-top: -20px;
+  font-weight: 300;
+}
+
+h3 {
+  font-weight: 300;
+  font-size: 20px;
+}
+
+p {
+  margin: 0 0 10px;
+  text-align: center;
+}
+/********** END CUSTOM BOOTSTRAP **********/
