@@ -1,59 +1,122 @@
-[![Build Status][1]][2] [![dependency status][9]][10] [![dev dependency status][11]][12]
+# Karma
 
-# extend() for Node.js <sup>[![Version Badge][8]][3]</sup>
+[![npm version](https://img.shields.io/npm/v/karma.svg?style=flat-square)](https://www.npmjs.com/package/karma) [![npm downloads](https://img.shields.io/npm/dm/karma.svg?style=flat-square)](https://www.npmjs.com/package/karma)
 
-`node-extend` is a port of the classic extend() method from jQuery. It behaves as you expect. It is simple, tried and true.
+[![Build Status](https://img.shields.io/travis/karma-runner/karma/master.svg?style=flat-square)](https://travis-ci.org/karma-runner/karma) [![Code Climate](https://img.shields.io/codeclimate/github/karma-runner/karma.svg?style=flat-square)](https://codeclimate.com/github/karma-runner/karma) [![Dependency Status](https://img.shields.io/david/karma-runner/karma.svg?style=flat-square)](https://david-dm.org/karma-runner/karma) [![devDependency Status](https://img.shields.io/david/dev/karma-runner/karma.svg?style=flat-square)](https://david-dm.org/karma-runner/karma#info=devDependencies)
 
-## Installation
+A simple tool that allows you to execute JavaScript code in multiple
+_real_ browsers.
 
-This package is available on [npm][3] as: `extend`
+> The main purpose of Karma is to make your TDD development easy,
+>  fast, and fun.
 
-``` sh
-npm install extend
-```
 
-## Usage
+## Help and Support
 
-**Syntax:** extend **(** [`deep`], `target`, `object1`, [`objectN`] **)** 
+* Obligatory [documentation]
+* Quick questions:
+[![Gitter Chat](https://img.shields.io/badge/GITTER-join%20chat-green.svg?style=flat-square)](https://gitter.im/karma-runner/karma)
+* Longer questions: [Mailing List]
+* Bug reports [Issue Tracker]
+* Everything less than 140 characters: [@JsKarma] on Twitter
 
-*Extend one object with one or more others, returning the modified object.*
 
-Keep in mind that the target object will be modified, and will be returned from extend().
 
-If a boolean true is specified as the first argument, extend performs a deep copy, recursively copying any objects it finds. Otherwise, the copy will share structure with the original object(s).
-Undefined properties are not copied. However, properties inherited from the object's prototype will be copied over.
+## When should I use Karma?
 
-### Arguments
+* You want to test code in *real* browsers.
+* You want to test code in multiple browsers (desktop, mobile,
+  tablets, etc.).
+* You want to execute your tests locally during development.
+* You want to execute your tests on a continuous integration server.
+* You want to execute your tests on every save.
+* You love your terminal.
+* You don't want your (testing) life to suck.
+* You want to use [Istanbul] to automagically generate coverage
+  reports.
+* You want to use [RequireJS] for your source files.
 
-* `deep` *Boolean* (optional)  
-If set, the merge becomes recursive (i.e. deep copy).
-* `target`	*Object*  
-The object to extend.
-* `object1`	*Object*  
-The object that will be merged into the first.
-* `objectN` *Object* (Optional)  
-More objects to merge into the first.
 
-## License
+## But I still want to use \_insert testing library\_
 
-`node-extend` is licensed under the [MIT License][4].
+Karma is not a testing framework, nor an assertion library.
+Karma just launches a HTTP server, and generates the test runner HTML file you probably already know from your favourite testing framework.
+So for testing purposes you can use pretty much anything you like. There are already plugins for most of the common testing frameworks:
 
-## Acknowledgements
+* [Jasmine]
+* [Mocha]
+* [QUnit]
+* and [many others](https://www.npmjs.org/browse/keyword/karma-adapter)
 
-All credit to the jQuery authors for perfecting this amazing utility.
+If you can't find an adapter for your favourite framework, don't worry and write your own.
+It's not that hard and we are here to help.
 
-Ported to Node.js by [Stefan Thomas][5] with contributions by [Jonathan Buchanan][6] and [Jordan Harband][7].
 
-[1]: https://travis-ci.org/justmoon/node-extend.png
-[2]: https://travis-ci.org/justmoon/node-extend
-[3]: https://npmjs.org/package/extend
-[4]: http://opensource.org/licenses/MIT
-[5]: https://github.com/justmoon
-[6]: https://github.com/insin
-[7]: https://github.com/ljharb
-[8]: http://vb.teelaun.ch/justmoon/node-extend.svg
-[9]: https://david-dm.org/justmoon/node-extend.png
-[10]: https://david-dm.org/justmoon/node-extend
-[11]: https://david-dm.org/justmoon/node-extend/dev-status.png
-[12]: https://david-dm.org/justmoon/node-extend#info=devDependencies
+## Which Browsers can I use?
 
+All the major browsers are supported, if you want to know more see the
+[browsers] page.
+
+
+## Troubleshooting
+See [FAQ](https://karma-runner.github.io/0.12/intro/faq.html).
+
+
+## I want to use it. Where do I sign?
+
+You don't need to sign anything but here are some resources to help
+you to get started...
+
+
+### Obligatory Screencast.
+
+Every serious project has a screencast, so here is ours.  Just click
+[here] and let the show begin.
+
+
+### Installation.
+
+See [installation](https://karma-runner.github.io/0.12/intro/installation.html).
+
+
+### Using it.
+
+See [configuration](https://karma-runner.github.io/0.12/intro/configuration.html).
+
+
+## This is so great. I want to help.
+
+Please, see
+[contributing](https://karma-runner.github.io/0.12/dev/contributing.html).
+
+
+## Why did you create this?
+
+Throughout the development of [AngularJS], we've been using [JSTD] for
+testing. I really think that JSTD is a great idea. Unfortunately, we
+had many problems with JSTD, so we decided to write our own test
+runner based on the same idea. We wanted a simple tool just for
+executing JavaScript tests that is both stable and fast. That's why we
+use the awesome [Socket.io] library and [Node.js].
+
+
+## My boss wants a license. So where is it?
+[MIT License](./LICENSE)
+
+
+[AngularJS]: https://angularjs.org/
+[JSTD]: https://code.google.com/p/js-test-driver/
+[Socket.io]: http://socket.io/
+[Node.js]: http://nodejs.org/
+[Jasmine]: https://github.com/karma-runner/karma-jasmine
+[Mocha]: https://github.com/karma-runner/karma-mocha
+[QUnit]: https://github.com/karma-runner/karma-qunit
+[here]: https://www.youtube.com/watch?v=MVw8N3hTfCI
+[Mailing List]: https://groups.google.com/forum/#!forum/karma-users
+[Issue Tracker]: https://github.com/karma-runner/karma/issues
+[@JsKarma]: https://twitter.com/JsKarma
+[RequireJS]: http://requirejs.org/
+[Istanbul]: https://github.com/gotwarlost/istanbul
+
+[browsers]: https://karma-runner.github.io/0.12/config/browsers.html
+[documentation]: https://karma-runner.github.io
